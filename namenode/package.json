@@ -1,0 +1,21 @@
+{
+  "name": "namenode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.7.12",
+    "grpc": "^1.24.11",
+    "protobufjs": "^7.2.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
