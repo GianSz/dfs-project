@@ -4,7 +4,6 @@ const {
   fileInformation,
   dataNodesInformation,
 } = require("../../data/data");
-const getClient = require("../datanodeClient");
 
 const login = (call) => {
   const [, ip] = call.getPeer().split(":");
