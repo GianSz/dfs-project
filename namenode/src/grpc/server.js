@@ -7,16 +7,16 @@ const {
   download,
 } = require("./controllers/namenode.controller");
 
-const PROTO_PATH = __dirname + "/namenode.proto";
+const NAMENODE_PROTO_PATH = __dirname + "/namenode.proto";
 
-const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
+const packageDefinitionNameNode = protoLoader.loadSync(NAMENODE_PROTO_PATH, {
   keepCase: true,
   longs: String,
   enums: String,
   arrays: true,
 });
 
-const nameNodeProto = grpc.loadPackageDefinition(packageDefinition);
+const nameNodeProto = grpc.loadPackageDefinition(packageDefinitionNameNode);
 
 const server = new grpc.Server();
 server.addService(nameNodeProto.NameNode.service, {
@@ -26,7 +26,6 @@ server.addService(nameNodeProto.NameNode.service, {
   },
   upload: (call, callback) => {
     const blocksInfo = upload(call);
-
     callback(null, {blocksInfo: blocksInfo});
   },
   download: (call, callback) => {
