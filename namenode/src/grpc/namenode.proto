@@ -1,15 +1,8 @@
 syntax="proto3";
 
-service NameNode {
-    rpc login(Empty) returns (Message) {}
+service FileTransfer {
     rpc upload(UploadRequest) returns (UploadResponse) {}
     rpc download(DownloadRequest) returns (DownloadResponse) {}
-}
-
-message Empty {}
-
-message Message {
-    string message = 1;
 }
 
 message UploadRequest {
