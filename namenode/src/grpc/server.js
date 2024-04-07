@@ -35,4 +35,5 @@ server.addService(nameNodeProto.NameNode.service, {
 });
 
 server.bind(`localhost:5000`, grpc.ServerCredentials.createInsecure());
-server.start();
+
+module.exports = server;
