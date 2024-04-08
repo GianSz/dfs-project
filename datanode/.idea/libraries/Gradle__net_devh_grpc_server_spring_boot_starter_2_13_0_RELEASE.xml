@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: net.devh:grpc-server-spring-boot-starter:2.13.0.RELEASE" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="net.devh" artifactId="grpc-server-spring-boot-starter" version="2.13.0.RELEASE" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../.gradle/caches/modules-2/files-2.1/net.devh/grpc-server-spring-boot-starter/2.13.0.RELEASE/ad0395908d3b42ee413ca1a91ccbcdc75cf36e47/grpc-server-spring-boot-starter-2.13.0.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../.gradle/caches/modules-2/files-2.1/net.devh/grpc-server-spring-boot-starter/2.13.0.RELEASE/c2ecb7fabbee93c0ceecfffed182e017b14ff085/grpc-server-spring-boot-starter-2.13.0.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

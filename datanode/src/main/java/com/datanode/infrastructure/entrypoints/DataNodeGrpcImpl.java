@@ -35,6 +35,7 @@ public class DataNodeGrpcImpl extends DataNodeGrpc.DataNodeImplBase {
                         .setData(ByteString.copyFrom(bufferBytes, 0, length))
                         .build());
             }
+            responseObserver.onCompleted();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

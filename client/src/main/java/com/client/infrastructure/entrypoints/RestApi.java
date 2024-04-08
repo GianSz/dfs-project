@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class RestApi {
             String fileExtension = file.getOriginalFilename().split("\\.")[1];
             Map<String, DataNodes> blocksDistribution = nameNodeClient.upload(file.getOriginalFilename().split("\\.")[0], file.getSize());
             blocksDistribution.forEach((blockName, dataNode) -> {
-                dataNodeClient.upload(blockName + "." +fileExtension);
+                dataNodeClient.upload(blockName + "." +fileExtension, dataNode.getDataNodes(0));
             });
         }
         catch (IOException e){
@@ -45,8 +46,19 @@ public class RestApi {
     }
 
     @GetMapping("/download")
-    private ResponseEntity<byte[]> downloadFile(@RequestParam("fileName") String fileName) {
-        return ResponseEntity.ok(new byte[2]);
+    private ResponseEntity<byte[]> downloadFile(@RequestParam("file") String file) {
+        Map<String, DataNodes> blocksDistribution = nameNodeClient.download(file.split("\\.")[0]);
+        ByteArrayOutputStream responseBytes = new ByteArrayOutputStream();
+        blocksDistribution.forEach((block, dataNodes) -> {
+            dataNodes.getDataNodesList().forEach(dataNode -> {
+                try {
+                    responseBytes.write(dataNodeClient.download(block + "." + file.split("\\.")[1], dataNode));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
+        return ResponseEntity.ok(responseBytes.toByteArray());
     }
 
 }

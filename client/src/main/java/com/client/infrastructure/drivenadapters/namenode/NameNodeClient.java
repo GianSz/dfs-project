@@ -5,6 +5,8 @@ import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
 import java.util.*;
 
 @Service
@@ -29,7 +31,7 @@ public class NameNodeClient {
         return response;
     }
 
-    public void download(String fileName){
+    public Map<String, DataNodes> download(String fileName){
         ManagedChannel channel = NettyChannelBuilder.forTarget(nameNodeHost).usePlaintext().build();
         NameNodeGrpc.NameNodeBlockingStub stub = NameNodeGrpc.newBlockingStub(channel);
         DownloadResponse downloadResponse = stub.download(DownloadRequest.newBuilder().setFileName(fileName).build());
@@ -38,6 +40,7 @@ public class NameNodeClient {
         keys.forEach(key -> log.info("Key: {}", key));
         List<DataNodes> dataNodes =  new ArrayList<>(response.values());
         dataNodes.forEach(dataNode -> log.info("Data node: {}", dataNode));
+        return response;
     }
 
 }
