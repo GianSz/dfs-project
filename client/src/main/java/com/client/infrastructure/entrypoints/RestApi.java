@@ -38,15 +38,17 @@ public class RestApi {
             log.info("Splited files at: {}", splitedFiles);
             String fileExtension = file.getOriginalFilename().split("\\.")[1];
             Map<String, DataNodes> blocksDistribution = nameNodeClient.upload(file.getOriginalFilename().split("\\.")[0], file.getSize());
-            blocksDistribution.forEach((blockName, dataNode) -> {
-                dataNodeClient.upload(blockName + "." +fileExtension, dataNode.getDataNodes(0));
+            blocksDistribution.forEach((blockName, dataNodes) -> {
+                dataNodes.getDataNodesList().forEach(dataNode -> {
+                    log.info("Uploading {} to {}", blockName, dataNode);
+                    dataNodeClient.upload(blockName + "." + fileExtension, dataNode);
+                });
             });
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             return ResponseEntity.internalServerError().body("Cannot access to files folder!");
         }
 
-        return ResponseEntity.ok("Uploaded file " + file.getOriginalFilename() );
+        return ResponseEntity.ok("Uploaded file " + file.getOriginalFilename());
     }
 
     @GetMapping("/download")
@@ -54,13 +56,12 @@ public class RestApi {
         Map<String, DataNodes> blocksDistribution = nameNodeClient.download(file.split("\\.")[0]);
         ByteArrayOutputStream responseBytes = new ByteArrayOutputStream();
         blocksDistribution.forEach((block, dataNodes) -> {
-            dataNodes.getDataNodesList().forEach(dataNode -> {
-                try {
-                    responseBytes.write(dataNodeClient.download(block + "." + file.split("\\.")[1], dataNode));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            log.info("Downloading {} from {}", block, dataNodes.getDataNodes(0));
+            try {
+                responseBytes.write(dataNodeClient.download(block + "." + file.split("\\.")[1], dataNodes.getDataNodes(0)));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         return ResponseEntity.ok(responseBytes.toByteArray());
     }

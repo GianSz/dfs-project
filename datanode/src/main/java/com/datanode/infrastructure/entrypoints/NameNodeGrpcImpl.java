@@ -20,7 +20,7 @@ public class NameNodeGrpcImpl extends CheckingGrpc.CheckingImplBase{
 
     @Override
     public void replicateBlock(ReplicateBlockRequest request, StreamObserver<Empty> responseObserver) {
-        String blockName = request.getBlockName();
+        String blockName = request.getBlockName() + ".csv";
         String dataNodeName = request.getDataNode();
         dataNodeReplicationClient.upload(blockName, dataNodeName);
     }

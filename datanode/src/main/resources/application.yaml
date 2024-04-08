@@ -3,4 +3,7 @@ server:
 grpc:
   server:
     port:
-      "${GRPC_PORT}"
+      ${GRPC_PORT}
+nameNode:
+  host: ${NAMENODE_HOST}
+  port: ${NAMENODE_PORT}
