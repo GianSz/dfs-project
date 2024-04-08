@@ -1,4 +1,4 @@
-const FRACTION_SIZE = 4;
+const FRACTION_SIZE = (process.env.FRACTION_SIZE || 5) * 1024;
 const activeDataNodes = [];
 const fileInformation = {};
 const dataNodesInformation = {};

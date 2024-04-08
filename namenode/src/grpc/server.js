@@ -10,6 +10,10 @@ const {
   bindServer,
 } = require("../utils/grpcServer");
 
+const {
+  getIpAddress,
+} = require("../utils/network");
+
 const NAMENODE_PROTO_PATH = __dirname + "/namenode.proto";
 const DATANODE_PROTO_PATH = __dirname + "/datanode.proto";
 
@@ -47,5 +51,6 @@ server.addService(dataNodeProto.Logging.service, {
   }
 });
 
-bindServer(server, `localhost:5000`);
+const ipAddress = getIpAddress();
+bindServer(server, `${ipAddress || "localhost"}:${process.env.PORT || 5000}`);
 module.exports = server;
