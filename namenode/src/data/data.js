@@ -1,5 +1,5 @@
-const FRACTION_SIZE = 15 * 1024;
-const activeDataNodes = ["localhost:9091"];
+const FRACTION_SIZE = (process.env.FRACTION_SIZE || 5) * 1024;
+const activeDataNodes = [];
 const fileInformation = {};
 const dataNodesInformation = {};
 

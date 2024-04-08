@@ -65,26 +65,6 @@ const download = (call) => {
   return fileInformation[fileName];
 };
 
-// const checkHealth = async () => {
-//   const promises = [];
-
-//   for (let dataNode of activeDataNodes) {
-//     promises.push(
-//       new Promise((resolve, reject) => {
-//         const client = getClient(dataNode);
-//         client.checkHealth({}, (err, response) => {
-//           if (err) {
-//             resolve("FAILED");
-//           }
-//           resolve("OK");
-//         });
-//       })
-//     );
-//   }
-
-//   Promise.all(promises).then((values) => { console.log(values) });
-// };
-
 module.exports = {
   login,
   upload,
