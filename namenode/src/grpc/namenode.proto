@@ -1,8 +1,8 @@
 syntax="proto3";
 
 service FileTransfer {
-    rpc upload(UploadRequest) returns (UploadResponse) {}
-    rpc download(DownloadRequest) returns (DownloadResponse) {}
+    rpc upload(UploadRequest) returns (Response) {}
+    rpc download(DownloadRequest) returns (Response) {}
 }
 
 message UploadRequest {
@@ -18,10 +18,11 @@ message DataNodes {
     repeated string dataNodes = 1;
 }
 
-message UploadResponse {
+message BlocksInfo {
     map<string, DataNodes> blocksInfo = 1;
 }
 
-message DownloadResponse {
-    map<string, DataNodes> blocksInfo = 1;
+message Response {
+    optional BlocksInfo info = 1;
+    optional string message = 2;
 }

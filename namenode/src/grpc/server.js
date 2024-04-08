@@ -20,11 +20,23 @@ const server = getServer();
 server.addService(nameNodeProto.FileTransfer.service, {
   upload: (call, callback) => {
     const blocksInfo = upload(call);
-    callback(null, {blocksInfo: blocksInfo});
+
+    if(typeof blocksInfo === "string") {
+      callback(null, { message: blocksInfo });
+    }
+    else{
+      callback(null, { info: { blocksInfo: blocksInfo } });
+    }
   },
   download: (call, callback) => {
     const blocksInfo = download(call);
-    callback(null, { blocksInfo: blocksInfo });
+
+    if(typeof blocksInfo == "string") {
+      callback(null, { message: blocksInfo });
+    }
+    else{
+      callback(null, { info: { blocksInfo: blocksInfo } });
+    }
   },
 });
 
