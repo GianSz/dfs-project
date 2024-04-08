@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+service Checking {
+    rpc checkHealth(Empty) returns (HealthCheckResponse) {}
+    rpc replicateBlock(ReplicateBlockRequest) returns (Empty) {}
+}
+
+service Logging {
+    rpc login(Empty) returns (Message) {}
+}
+
+message Empty {}
+
+message Message {
+    string message = 1;
+}
+
+message HealthCheckResponse {
+    string status = 1;
+}
+
+message ReplicateBlockRequest {
+    string blockName = 1;
+    string dataNode = 2;
+}
