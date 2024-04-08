@@ -1,0 +1,37 @@
+syntax="proto3";
+
+option java_multiple_files = true;
+option java_package = "com.namenode.grpc";
+
+service NameNode {
+  rpc login(Empty) returns (Message) {}
+  rpc upload(UploadRequest) returns (UploadResponse) {}
+  rpc download(DownloadRequest) returns (DownloadResponse) {}
+}
+
+message Empty {}
+
+message Message {
+  string message = 1;
+}
+
+message UploadRequest {
+  string fileName = 1;
+  int64 fileSize = 2;
+}
+
+message DownloadRequest {
+  string fileName = 1;
+}
+
+message DataNodes {
+  repeated string dataNodes = 1;
+}
+
+message UploadResponse {
+  map<string, DataNodes> blocksInfo = 1;
+}
+
+message DownloadResponse {
+  map<string, DataNodes> blocksInfo = 1;
+}
