@@ -3,16 +3,9 @@ syntax="proto3";
 option java_multiple_files = true;
 option java_package = "com.namenode.grpc";
 
-service NameNode {
-  rpc login(Empty) returns (Message) {}
-  rpc upload(UploadRequest) returns (UploadResponse) {}
-  rpc download(DownloadRequest) returns (DownloadResponse) {}
-}
-
-message Empty {}
-
-message Message {
-  string message = 1;
+service FileTransfer {
+  rpc upload(UploadRequest) returns (Response) {}
+  rpc download(DownloadRequest) returns (Response) {}
 }
 
 message UploadRequest {
@@ -28,10 +21,11 @@ message DataNodes {
   repeated string dataNodes = 1;
 }
 
-message UploadResponse {
+message BlocksInfo {
   map<string, DataNodes> blocksInfo = 1;
 }
 
-message DownloadResponse {
-  map<string, DataNodes> blocksInfo = 1;
+message Response {
+  optional BlocksInfo info = 1;
+  optional string message = 2;
 }

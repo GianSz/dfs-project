@@ -6,6 +6,7 @@ import com.client.infrastructure.helpers.FileManager;
 import com.namenode.grpc.DataNodes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,13 +25,16 @@ public class RestApi {
     private final NameNodeClient nameNodeClient;
     private final DataNodeClient dataNodeClient;
 
+    @Value("${files.chunckSize}")
+    private Integer chunckSize;
+
     @PostMapping("/upload")
     private ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             File filesDir = fileManager.getFilesFolder();
             String savedFilePath = fileManager.saveFileToUploadLocally(filesDir, file.getOriginalFilename(), file.getBytes());
             log.info("File size: {}", file.getSize());
-            String splitedFiles = fileManager.splitFileBySize(savedFilePath, filesDir.getAbsolutePath(), 15);
+            String splitedFiles = fileManager.splitFileBySize(savedFilePath, filesDir.getAbsolutePath(), chunckSize);
             log.info("Splited files at: {}", splitedFiles);
             String fileExtension = file.getOriginalFilename().split("\\.")[1];
             Map<String, DataNodes> blocksDistribution = nameNodeClient.upload(file.getOriginalFilename().split("\\.")[0], file.getSize());

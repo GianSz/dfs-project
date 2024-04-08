@@ -1,0 +1,26 @@
+syntax="proto3";
+
+option java_multiple_files = true;
+option java_package = "com.datanode.grpc";
+
+message BlockInfo {
+  string blockName = 1;
+}
+
+message BlockDataRequest {
+  string blockName = 1;
+  bytes data = 2;
+}
+
+message BlockData {
+  bytes data = 1;
+}
+
+message BlockDataResponse {
+  string message = 1;
+}
+
+service DataNode {
+  rpc uploadBlock(stream BlockDataRequest) returns (BlockDataResponse) {}
+  rpc downloadBlock(BlockInfo) returns (stream BlockData) {}
+}

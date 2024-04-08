@@ -10,19 +10,25 @@ services:
     networks:
       dfs_network:
         ipv4_address: 172.20.0.2
-  # client:
-  #   build: ./client/
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - FRACTION_SIZE=10
-  #   networks:
-  #     dfsnetwork:
-  #       ipv4_address: 172.20.0.3
+  client:
+    build: ./client/
+    ports:
+      - "8080:8080"
+    environment:
+      - FRACTION_SIZE=10
+      - SERVER_PORT=8080
+      - NAMENODE_HOST=172.20.0.2
+      - NAMENODE_PORT=5000
+      - DATANODE_PORT=3000
+    networks:
+      dfs_network:
+        ipv4_address: 172.20.0.3
   datanode:
     build: ./datanode/
     depends_on:
       - namenode
+    environment:
+      - GRPC_PORT=3000
     networks:
       dfs_network:
     scale: 4

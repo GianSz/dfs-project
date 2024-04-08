@@ -3,4 +3,4 @@ server:
 grpc:
   server:
     port:
-      9091
+      "${GRPC_PORT}"

@@ -1,2 +1,9 @@
 server:
-  port: 8081
+  port: "${SERVER_PORT}"
+files:
+  chunckSize: "${FRACTION_SIZE}"
+nameNode:
+  host: "${NAMENODE_HOST}"
+  port: "${NAMENODE_PORT}"
+dataNode:
+  port: "${DATANODE_PORT}"
