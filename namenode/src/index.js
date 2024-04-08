@@ -1,7 +1,5 @@
 const server = require("./grpc/server");
-const {
-  checkHealth,
-} = require("./grpc/controllers/namenode.controller");
+const { checkHealth } = require("./utils/sincronization");
 
 try {
   server.start();

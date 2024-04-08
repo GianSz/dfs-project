@@ -4,7 +4,6 @@ const {
   fileInformation,
   dataNodesInformation,
 } = require("../../data/data");
-const getClient = require("../datanodeClient");
 
 const login = (call) => {
   const [, ip] = call.getPeer().split(":");
@@ -66,29 +65,8 @@ const download = (call) => {
   return fileInformation[fileName];
 };
 
-const checkHealth = async () => {
-  for (const dataNode of activeDataNodes) {
-    new Promise((resolve, reject) => {
-      const client = getClient("localhost");
-      client.checkHealth({}, (err, response) => {
-        if (err) {
-          // TODO 
-          // Replicate all blocks that are present on the fallen datanode to another
-          console.log("DataNode is down");
-          // console.log(err);
-          resolve(err);
-        }
-        else{
-          resolve(response);
-        }
-      });
-    });
-  }
-};
-
 module.exports = {
   login,
   upload,
   download,
-  checkHealth,
 };
