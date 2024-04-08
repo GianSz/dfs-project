@@ -41,7 +41,7 @@ public class FileManager {
         byte[] buffer = new byte[chunkSizeInBytes];
         int bytesRead;
         String fileName = sourceFile.getName().split("\\.")[0];
-        int chunkCounter = 1;
+        int chunkCounter = 0;
 
         try (InputStream inputStream = new FileInputStream(sourceFile)) {
             while ((bytesRead = inputStream.read(buffer)) != -1) {

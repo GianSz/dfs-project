@@ -20,7 +20,7 @@ public class NameNodeClient {
                 UploadRequest
                         .newBuilder()
                         .setFileName(fileName)
-                        .setFileSize(fileSize.intValue())
+                        .setFileSize(fileSize)
                         .build()
         );
         Map<String, DataNodes> response = uploadResponse.getBlocksInfoMap();

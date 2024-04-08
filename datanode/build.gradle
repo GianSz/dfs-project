@@ -5,7 +5,7 @@ plugins {
 	id 'com.google.protobuf' version '0.8.17'
 }
 
-group = 'com.client'
+group = 'com.datanode'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = "11"
 

@@ -18,6 +18,6 @@ public class ClientApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        nameNodeGrpc.upload("test", 12L);
+//        nameNodeGrpc.upload("test", 12000L);
     }
 }
