@@ -6,16 +6,40 @@ const {
 
 const getClient = require("../grpc/datanodeClient");
 
-const checkHealth = () => {
-  for (const dataNode of activeDataNodes) {
-    const client = getClient(dataNode);
-    client.checkHealth({}, (err, response) => {
-      if (err) {
-        console.log("DataNode is down: ", dataNode);
-        replicateBlocks(dataNode);
-      }
-    });
+let isCheckingHealth = false;
+
+const checkHealth = async () => {
+  if (isCheckingHealth) {
+    console.log("Waiting for previous health check to finish");
+    return;
   }
+
+  console.log("Checking heatlh of nodes: ", activeDataNodes);
+  isCheckingHealth = true;
+
+  const promises = [];
+  for (const dataNode of activeDataNodes) {
+    promises.push(
+      new Promise((resolve, reject) => {
+        const client = getClient(dataNode);
+        client.checkHealth({}, (err, response) => {
+          if (err) reject(err);
+          else resolve(response);
+        });
+      })
+    );
+  }
+
+  const results = await Promise.allSettled(promises);
+
+  results.forEach((result, index) => {
+    if (result.status === "rejected") {
+      console.log("Datanode broken: ", activeDataNodes[index]);
+      replicateBlocks(activeDataNodes[index]);
+    }
+  });
+
+  isCheckingHealth = false;
 };
 
 const replicateBlocks = (dataNode) => {

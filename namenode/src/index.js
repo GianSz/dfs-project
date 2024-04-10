@@ -6,7 +6,6 @@ try {
   console.log("NameNode server running");
 
   setInterval(()=>{
-    console.log("Checking health");
     checkHealth();
   }, 2000);
 } catch (error) {
