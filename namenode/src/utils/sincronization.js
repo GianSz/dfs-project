@@ -6,26 +6,23 @@ const {
 
 const getClient = require("../grpc/datanodeClient");
 
-const checkHealth = async () => {
+const checkHealth = () => {
   for (const dataNode of activeDataNodes) {
-    new Promise((resolve, reject) => {
-      const client = getClient(dataNode);
-      client.checkHealth({}, (err, response) => {
-        if (err) {
-          replicateBlocks(dataNode);
-          resolve(err);
-        } else {
-          resolve(response);
-        }
-      });
+    const client = getClient(dataNode);
+    client.checkHealth({}, (err, response) => {
+      if (err) {
+        console.log("DataNode is down: ", dataNode);
+        replicateBlocks(dataNode);
+      }
     });
   }
 };
 
 const replicateBlocks = (dataNode) => {
-  const blocks = dataNodesInformation[dataNode];
+  if(activeDataNodes.indexOf(dataNode) === -1) return;
 
   removeFromArray(activeDataNodes, dataNode);
+  const blocks = dataNodesInformation[dataNode];
   delete dataNodesInformation[dataNode];
 
   if (blocks === undefined) {
@@ -51,7 +48,7 @@ const replicateBlocks = (dataNode) => {
     blockHolders.push(replicationDataNode);
     dataNodesInformation[replicationDataNode].push(block);
 
-    const replicationClient = getClient(replicationDataNode);
+    const replicationClient = getClient(blockHolders[0]);
     replicationClient.replicateBlock(
       { blockName: block, dataNode: replicationDataNode },
       (err, response) => {}
