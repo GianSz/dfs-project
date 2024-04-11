@@ -1,6 +1,15 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="datanode [bootRun]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
     <ExternalSystemSettings>
+      <option name="env">
+        <map>
+          <entry key="DATANODE_PORT" value="9000" />
+          <entry key="FRACTION_SIZE" value="10" />
+          <entry key="GRPC_PORT" value="7280" />
+          <entry key="NAMENODE_HOST" value="localhost" />
+          <entry key="NAMENODE_PORT" value="9000" />
+        </map>
+      </option>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
       <option name="externalSystemIdString" value="GRADLE" />
