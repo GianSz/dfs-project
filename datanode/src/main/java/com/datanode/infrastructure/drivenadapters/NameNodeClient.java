@@ -20,6 +20,7 @@ public class NameNodeClient {
         ManagedChannel channel = NettyChannelBuilder.forTarget(nameNodeHost + ":" + nameNodePort).usePlaintext().build();
         LoggingGrpc.LoggingBlockingStub stub = LoggingGrpc.newBlockingStub(channel);
         Message loginResponse = stub.login(Empty.newBuilder().build());
+        channel.shutdown();
         log.info("Name node login response: {}", loginResponse.getMessage());
     }
 

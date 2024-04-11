@@ -45,6 +45,7 @@ public class DataNodeReplicationClient {
                 requestObserver.onNext(request);
             }
         } catch (IOException e) {
+            channel.shutdown();
             e.printStackTrace();
         }
 
