@@ -43,6 +43,7 @@ public class DataNodeClient {
                 requestObserver.onNext(request);
             }
         } catch (IOException e) {
+            channel.shutdown();
             e.printStackTrace();
         }
 
@@ -60,9 +61,11 @@ public class DataNodeClient {
             try {
                 responseBytes.write(blockData.toByteArray());
             } catch (IOException e) {
+                channel.shutdown();
                 throw new RuntimeException(e);
             }
         });
+        channel.shutdown();
         return responseBytes.toByteArray();
     }
 

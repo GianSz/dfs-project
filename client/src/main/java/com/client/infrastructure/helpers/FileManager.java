@@ -45,7 +45,7 @@ public class FileManager {
 
         try (InputStream inputStream = new FileInputStream(sourceFile)) {
             while ((bytesRead = inputStream.read(buffer)) != -1) {
-                String chunkFileName = fileName + "_" + chunkCounter + "." + sourceFile.getName().split("\\.")[1];
+                String chunkFileName = fileName + "." + sourceFile.getName().split("\\.")[1] + "_" + chunkCounter;
                 File chunkFile = new File(destinationPath, chunkFileName);
                 try (OutputStream outputStream = new FileOutputStream(chunkFile)) {
                     outputStream.write(buffer, 0, bytesRead);

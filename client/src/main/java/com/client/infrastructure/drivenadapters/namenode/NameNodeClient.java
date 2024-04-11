@@ -28,9 +28,13 @@ public class NameNodeClient {
                         .setFileSize(fileSize)
                         .build()
         );
+        if(!uploadResponse.getMessage().isEmpty()){
+            channel.shutdown();
+            throw new RuntimeException(uploadResponse.getMessage());
+        }
         Map<String, DataNodes> response = uploadResponse.getInfo().getBlocksInfoMap();
         log.info("Response: {}", response);
-
+        channel.shutdown();
         return response;
     }
 
@@ -38,13 +42,16 @@ public class NameNodeClient {
         ManagedChannel channel = NettyChannelBuilder.forTarget(nameNodeHost + ":" + nameNodePort).usePlaintext().build();
         FileTransferGrpc.FileTransferBlockingStub stub = FileTransferGrpc.newBlockingStub(channel);
         Response downloadResponse = stub.download(DownloadRequest.newBuilder().setFileName(fileName).build());
-        if(downloadResponse.getMessage().equals("File not found")){
-            throw new RuntimeException("File not found");        }
+        if(!downloadResponse.getMessage().isEmpty()){
+            channel.shutdown();
+            throw new RuntimeException(downloadResponse.getMessage());
+        }
         Map<String, DataNodes> response = downloadResponse.getInfo().getBlocksInfoMap();
         Set<String> keys = response.keySet();
         keys.forEach(key -> log.info("Key: {}", key));
         List<DataNodes> dataNodes =  new ArrayList<>(response.values());
         dataNodes.forEach(dataNode -> log.info("Data node: {}", dataNode));
+        channel.shutdown();
         return response;
     }
 

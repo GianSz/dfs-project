@@ -37,12 +37,16 @@ public class RestApi {
             log.info("File size: {}", file.getSize());
             String splitedFiles = fileManager.splitFileBySize(savedFilePath, filesDir.getAbsolutePath(), chunckSize);
             log.info("Splited files at: {}", splitedFiles);
-            String fileExtension = file.getOriginalFilename().split("\\.")[1];
-            Map<String, DataNodes> blocksDistribution = nameNodeClient.upload(file.getOriginalFilename().split("\\.")[0], file.getSize());
+            Map<String, DataNodes> blocksDistribution = new HashMap<>();
+            try{
+                blocksDistribution = nameNodeClient.upload(file.getOriginalFilename(), file.getSize());
+            }catch (RuntimeException e){
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
             blocksDistribution.forEach((blockName, dataNodes) -> {
                 dataNodes.getDataNodesList().forEach(dataNode -> {
                     log.info("Uploading {} to {}", blockName, dataNode);
-                    dataNodeClient.upload(blockName + "." + fileExtension, dataNode);
+                    dataNodeClient.upload(blockName, dataNode);
                 });
             });
         } catch (IOException e) {
@@ -53,18 +57,18 @@ public class RestApi {
     }
 
     @GetMapping("/download")
-    private ResponseEntity<byte[]> downloadFile(@RequestParam("file") String file) {
+    private ResponseEntity downloadFile(@RequestParam("file") String file) {
         Map<String, DataNodes> blocksDistribution = new HashMap<>();
         try {
-            blocksDistribution = nameNodeClient.download(file.split("\\.")[0]);
+            blocksDistribution = nameNodeClient.download(file);
         }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body(e.getMessage());
         }
         ByteArrayOutputStream responseBytes = new ByteArrayOutputStream();
         blocksDistribution.forEach((block, dataNodes) -> {
             log.info("Downloading {} from {}", block, dataNodes.getDataNodes(0));
             try {
-                responseBytes.write(dataNodeClient.download(block + "." + file.split("\\.")[1], dataNodes.getDataNodes(0)));
+                responseBytes.write(dataNodeClient.download(block, dataNodes.getDataNodes(0)));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
