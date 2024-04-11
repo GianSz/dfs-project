@@ -1,12 +1,14 @@
 package com.client;
 
 import com.client.infrastructure.drivenadapters.namenode.NameNodeClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@Slf4j
 public class ClientApplication implements CommandLineRunner {
 
     @Autowired
@@ -18,6 +20,6 @@ public class ClientApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        nameNodeGrpc.upload("test", 12000L);
+        log.info("Client started...");
     }
 }

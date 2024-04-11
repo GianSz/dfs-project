@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -53,7 +54,12 @@ public class RestApi {
 
     @GetMapping("/download")
     private ResponseEntity<byte[]> downloadFile(@RequestParam("file") String file) {
-        Map<String, DataNodes> blocksDistribution = nameNodeClient.download(file.split("\\.")[0]);
+        Map<String, DataNodes> blocksDistribution = new HashMap<>();
+        try {
+            blocksDistribution = nameNodeClient.download(file.split("\\.")[0]);
+        }catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
         ByteArrayOutputStream responseBytes = new ByteArrayOutputStream();
         blocksDistribution.forEach((block, dataNodes) -> {
             log.info("Downloading {} from {}", block, dataNodes.getDataNodes(0));

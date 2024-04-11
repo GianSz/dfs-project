@@ -38,6 +38,8 @@ public class NameNodeClient {
         ManagedChannel channel = NettyChannelBuilder.forTarget(nameNodeHost + ":" + nameNodePort).usePlaintext().build();
         FileTransferGrpc.FileTransferBlockingStub stub = FileTransferGrpc.newBlockingStub(channel);
         Response downloadResponse = stub.download(DownloadRequest.newBuilder().setFileName(fileName).build());
+        if(downloadResponse.getMessage().equals("File not found")){
+            throw new RuntimeException("File not found");        }
         Map<String, DataNodes> response = downloadResponse.getInfo().getBlocksInfoMap();
         Set<String> keys = response.keySet();
         keys.forEach(key -> log.info("Key: {}", key));
